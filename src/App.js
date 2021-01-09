@@ -1,25 +1,44 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import Movielist from './components/Movielist';
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const [movieResult, updateMovieResult] = useState([]);
+	const [userquery, updateUserQuery] = useState('');
+
+	const handleChange = (e) => {
+    const { value } = e.target;
+    updateUserQuery(value)
+    
+	};
+	const handleSubmit = (e) => {
+    e.preventDefault()
+    fetch(`http://www.omdbapi.com/?s=${userquery}&apikey=${process.env.REACT_APP_API_KEY}`)
+    .then((resp)=>resp.json())
+    .then((data)=>{
+      updateMovieResult(data)
+      console.log(data, movieResult )
+    })   
+	};
+
+	return (
+		<div className="App">
+			<form onSubmit={handleSubmit}>
+				<input
+					type="text"
+					name="userInput"
+          placeholder="Search Movie"
+          className ="userInput"
+          onChange={handleChange}
+          value={userquery}
+          
+				/>
+				<button onSubmit={handleSubmit}> Enter</button>
+			</form>
+
+			<Movielist movieresult={movieResult} />
+		</div>
+	);
 }
 
 export default App;
