@@ -23,29 +23,29 @@ function App() {
 		const fetchRecords = async () => {
 			setLoading(true);
 			const res = await axios.get(
-				`http://www.omdbapi.com/?s=${userquery}&apikey=${process.env.REACT_APP_API_KEY}`
+				`https://www.omdbapi.com/?s=${userquery}&apikey=${process.env.REACT_APP_API_KEY}`
 			);
 			setMovieResult(res.data.Search);
 			setLoading(false);
-			console.log(movieResult);
 		};
 		fetchRecords();
 	};
 	//handle movie nomination
 	const handleNomination = (id) => {
 		const nomination = movieResult.filter((movie) => {
-			return id === movie.imdbID;
+			return movie.imdbID === id;
 		});
-		const nominated = [...nominateListPage, nomination];
+		const nominated = [...nominateListPage, ...nomination];
 		setnominateListPage(nominated);
+		document.querySelector(".nominate-btn").disabled=true
 	};
 	// handle remove from nomination list
-	const handleRemove =(id)=>{
-const filtered = nominateListPage.filter((movie)=>{
-	return 	movie.imdbID !== id;
-});
-setnominateListPage(filtered);
-	}
+	const handleRemove = (id) => {
+		const filtered = nominateListPage.filter((movie) => {
+			return movie.imdbID !== id;
+		});
+		setnominateListPage(filtered);
+	};
 	//handle navigation to nomination page
 	const directToNomination = () => {
 		setMoviePage(false);
@@ -70,11 +70,13 @@ setnominateListPage(filtered);
 				/>
 			)}
 
-			{nominationPage && <Nominationspage 
-			nominationresult={nominateListPage} 
-			directToHome={directToHome}
-			handleRemove={handleRemove}
-			/>}
+			{nominationPage && (
+				<Nominationspage
+					nominationresult={nominateListPage}
+					directToHome={directToHome}
+					handleRemove={handleRemove}
+				/>
+			)}
 		</div>
 	);
 }
