@@ -1,53 +1,80 @@
 import React, { useState } from 'react';
-import axios from 'axios'
+import axios from 'axios';
 import Movielist from './components/Movielist';
+import Nominationspage from './components/Nominationspage';
 import './App.css';
 
 function App() {
-	const [movieResult, updateMovieResult] = useState([]);
+	const [movieResult, setMovieResult] = useState([]);
+	const [nominateListPage, setnominateListPage] = useState([]);
 	const [userquery, updateUserQuery] = useState('');
 	const [loading, setLoading] = useState(false);
+	const [moviePage, setMoviePage] = useState(true);
+	const [nominationPage, setNominationPage] = useState(false);
 
+	//get user movie search
 	const handleChange = (e) => {
-    const { value } = e.target;
-    updateUserQuery(value)
-    
+		const { value } = e.target;
+		updateUserQuery(value);
 	};
+	//handle movie search
 	const handleSubmit = (e) => {
-	e.preventDefault()
-	const fetchRecords = async()=>{
-  setLoading(true);
-  const res = await axios.get(`http://www.omdbapi.com/?s=${userquery}&apikey=${process.env.REACT_APP_API_KEY}`);
-  updateMovieResult(res.data.Search)
-  setLoading(false);
-  console.log(movieResult)
-}
-fetchRecords()
-
-    // fetch(`http://www.omdbapi.com/?s=${userquery}&apikey=${process.env.REACT_APP_API_KEY}`)
-    // .then((resp)=>resp.json())
-    // .then((data)=>{
-    //   updateMovieResult(data.Search)
-    //   console.log(movieResult, data )
-    // })   
+		e.preventDefault();
+		const fetchRecords = async () => {
+			setLoading(true);
+			const res = await axios.get(
+				`http://www.omdbapi.com/?s=${userquery}&apikey=${process.env.REACT_APP_API_KEY}`
+			);
+			setMovieResult(res.data.Search);
+			setLoading(false);
+			console.log(movieResult);
+		};
+		fetchRecords();
 	};
-
+	//handle movie nomination
+	const handleNomination = (id) => {
+		const nomination = movieResult.filter((movie) => {
+			return id === movie.imdbID;
+		});
+		const nominated = [...nominateListPage, nomination];
+		setnominateListPage(nominated);
+	};
+	// handle remove from nomination list
+	const handleRemove =(id)=>{
+const filtered = nominateListPage.filter((movie)=>{
+	return 	movie.imdbID !== id;
+});
+setnominateListPage(filtered);
+	}
+	//handle navigation to nomination page
+	const directToNomination = () => {
+		setMoviePage(false);
+		setNominationPage(true);
+	};
+	//handle navigation to home page
+	const directToHome = () => {
+		setMoviePage(true);
+		setNominationPage(false);
+	};
 	return (
 		<div className="App">
-			<form onSubmit={handleSubmit}>
-				<input
-					type="text"
-					name="userInput"
-          placeholder="Search Movie"
-          className ="userInput"
-          onChange={handleChange}
-          value={userquery}
-          
+			{moviePage && (
+				<Movielist
+					movieresult={movieResult}
+					handleNomination={handleNomination}
+					loading={loading}
+					userquery={userquery}
+					handleChange={handleChange}
+					handleSubmit={handleSubmit}
+					directToNomination={directToNomination}
 				/>
-				<button onSubmit={handleSubmit}> Enter</button>
-			</form>
+			)}
 
-			<Movielist movieresult={[1,2,3,4,5]} />
+			{nominationPage && <Nominationspage 
+			nominationresult={nominateListPage} 
+			directToHome={directToHome}
+			handleRemove={handleRemove}
+			/>}
 		</div>
 	);
 }
