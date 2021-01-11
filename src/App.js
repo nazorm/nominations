@@ -37,7 +37,11 @@ function App() {
 		});
 		const nominated = [...nominateListPage, ...nomination];
 		setnominateListPage(nominated);
-		document.querySelector(".nominate-btn").disabled=true
+		document.querySelector('.nominate-btn').disabled = true;
+		if (nominateListPage.length >= 5) {
+			alert('You can only nominate 5 movies');
+			document.querySelector('.nominate-btn').disabled = true;
+		}
 	};
 	// handle remove from nomination list
 	const handleRemove = (id) => {
