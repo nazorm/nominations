@@ -1,4 +1,5 @@
 import React from 'react';
+import {Button} from 'antd'
 import '../App.css';
 
 function Nominationspage(props){
@@ -8,7 +9,7 @@ function Nominationspage(props){
                  <img src={d.Poster} alt='poster'/>
             <h4>Title: {d.Title}</h4>
             <h4>Year: {d.Year}</h4>
-            <button className='remove-nomination-btn movie-action-btn' onClick={()=>props.handleRemove(d.imdbID)}>Remove Nomination</button>
+            <Button type='default' className='remove-nomination-btn movie-action-btn' onClick={()=>props.handleRemove(d.imdbID)}>Remove Nomination</Button>
             </div>
         )
     })
@@ -16,7 +17,7 @@ return(
     <div className='nominationspage'>
         <div className='navigate'>
         <h1 className='web-name'>Shopify Movie Nominations</h1>
-        <button className='direct-to-home-btn header-btn' onClick={props.directToHome}>Home</button>
+        <Button type='primary' className='direct-to-home-btn header-btn' onClick={props.directToHome}>Home</Button>
         </div>
        
         
