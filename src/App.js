@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+
 import Movielist from './components/Movielist';
 import Nominationspage from './components/Nominationspage';
 import './App.css';
@@ -18,17 +19,22 @@ function App() {
 		updateUserQuery(value);
 	};
 	//handle movie search
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		const fetchRecords = async () => {
-			setLoading(true);
-			const res = await axios.get(
-				`https://www.omdbapi.com/?s=${userquery}&apikey=${process.env.REACT_APP_API_KEY}`
-			);
-			setMovieResult(res.data.Search);
-			setLoading(false);
-		};
-		fetchRecords();
+	const handleSubmit = () => {
+		if(userquery===""){
+			alert('Enter a Movie Name')
+			return
+		}else{
+			const fetchRecords = async () => {
+				setLoading(true);
+				const res = await axios.get(
+					`https://www.omdbapi.com/?s=${userquery}&apikey=${process.env.REACT_APP_API_KEY}`
+				);
+				setMovieResult(res.data.Search);
+				setLoading(false);
+			};
+			fetchRecords();
+		}
+		
 	};
 	//handle movie nomination
 	const handleNomination = (id) => {
@@ -40,7 +46,7 @@ function App() {
 		document.querySelector('.nominate-btn').disabled = true;
 		if (nominateListPage.length >= 5) {
 			alert('You can only nominate 5 movies');
-			document.querySelector('.nominate-btn').disabled = true;
+			
 		}
 	};
 	// handle remove from nomination list
