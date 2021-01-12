@@ -1,5 +1,9 @@
 import React from 'react';
 import '../App.css';
+import {Button, Input} from 'antd'
+
+const {Search} = Input;
+
 function Movielist(props){
     const movies = props.movieresult.map(( d)=>{
         return(
@@ -7,9 +11,9 @@ function Movielist(props){
             <img src={d.Poster} alt='poster'/>
             <h4>Title: {d.Title}</h4>
             <h4>Year: {d.Year}</h4>
-            <button className='nominate-btn movie-action-btn'
+            <Button type='default' className='nominate-btn movie-action-btn'
             onClick={()=>props.handleNomination(d.imdbID)}>
-                Nominate</button>
+                Nominate</Button>
         </div>
         )
     })
@@ -18,20 +22,20 @@ function Movielist(props){
             <div className='movie-header home-movie-header'>
                 <div className='navigate'>
                     <h1 className='web-name'>Shopify Movie Nominations</h1>
-                <button className='direct-to-nomination-btn header-btn'onClick={props.directToNomination}>Nominations</button>
+                <Button type="primary" className='direct-to-nomination-btn header-btn'onClick={props.directToNomination}>Nominations</Button>
                 </div>
+
+                <Search
+                className='form' 
+      placeholder="Search Movies"
+      allowClear
+      enterButton="Search"
+      size="medium"
+      onChange={props.handleChange}
+      value={props.userquery}
+      onSearch={props.handleSubmit}
+    />
                 
-    	<form className='form' onSubmit={props.handleSubmit}>
-				<input
-					type="text"
-					name="userInput"
-					placeholder="Search Movie"
-					className="userInput"
-					onChange={props.handleChange}
-					value={props.userquery}
-				/>
-				<button className='search-btn header-btn' onSubmit={props.handleSubmit}> Enter</button>
-			</form>
             
             </div>
             <div className='movies-container'>
