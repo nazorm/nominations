@@ -12,7 +12,7 @@ function App() {
 	const [loading, setLoading] = useState(false);
 	const [moviePage, setMoviePage] = useState(true);
 	const [nominationPage, setNominationPage] = useState(false);
-	const [clickedbuttons, setclickedbuttons] = useState([])
+	const [clickedbuttons, setclickedbuttons] = useState([]);
 	const clickedbtns = [];
 	//get user movie search
 	const handleChange = (e) => {
@@ -21,10 +21,10 @@ function App() {
 	};
 	//handle movie search
 	const handleSubmit = () => {
-		if(userquery===""){
-			alert('Enter a Movie Name')
-			return
-		}else{
+		if (userquery === '') {
+			alert('Enter a Movie Name');
+			return;
+		} else {
 			const fetchMovies = async () => {
 				setLoading(true);
 				const res = await axios.get(
@@ -34,22 +34,21 @@ function App() {
 				setLoading(false);
 			};
 			fetchMovies();
-			updateUserQuery("")
+			updateUserQuery('');
 		}
-		
 	};
 	//handle movie nomination
 	const handleNomination = (id) => {
 		const nomination = movieResult.filter((movie) => {
 			return movie.imdbID === id;
 		});
-	
-		clickedbtns.push(id)
-		setclickedbuttons(clickedbtns)
+
+		clickedbtns.push(id);
+		setclickedbuttons(clickedbtns);
 		const nominated = [...nominateListPage, ...nomination];
 		setnominateListPage(nominated);
 		if (nominateListPage.length >= 5) {
-			alert('You can only nominate 5 movies');	
+			alert('You can only nominate 5 movies');
 		}
 	};
 	// handle remove from nomination list
