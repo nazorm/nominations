@@ -12,7 +12,8 @@ function App() {
 	const [loading, setLoading] = useState(false);
 	const [moviePage, setMoviePage] = useState(true);
 	const [nominationPage, setNominationPage] = useState(false);
-
+	const [clickedbuttons, setclickedbuttons] = useState([])
+	const clickedbtns = [];
 	//get user movie search
 	const handleChange = (e) => {
 		const { value } = e.target;
@@ -24,7 +25,7 @@ function App() {
 			alert('Enter a Movie Name')
 			return
 		}else{
-			const fetchRecords = async () => {
+			const fetchMovies = async () => {
 				setLoading(true);
 				const res = await axios.get(
 					`https://www.omdbapi.com/?s=${userquery}&apikey=${process.env.REACT_APP_API_KEY}`
@@ -32,7 +33,8 @@ function App() {
 				setMovieResult(res.data.Search);
 				setLoading(false);
 			};
-			fetchRecords();
+			fetchMovies();
+			updateUserQuery("")
 		}
 		
 	};
@@ -41,12 +43,13 @@ function App() {
 		const nomination = movieResult.filter((movie) => {
 			return movie.imdbID === id;
 		});
+	
+		clickedbtns.push(id)
+		setclickedbuttons(clickedbtns)
 		const nominated = [...nominateListPage, ...nomination];
 		setnominateListPage(nominated);
-		document.querySelector('.nominate-btn').disabled = true;
 		if (nominateListPage.length >= 5) {
-			alert('You can only nominate 5 movies');
-			
+			alert('You can only nominate 5 movies');	
 		}
 	};
 	// handle remove from nomination list
@@ -77,6 +80,7 @@ function App() {
 					handleChange={handleChange}
 					handleSubmit={handleSubmit}
 					directToNomination={directToNomination}
+					clickedbuttons={clickedbuttons}
 				/>
 			)}
 
