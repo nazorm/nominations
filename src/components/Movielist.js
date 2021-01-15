@@ -13,9 +13,9 @@ function Movielist(props) {
 				<h4>Year: {d.Year}</h4>
 				<Button
 					type="default"
-					className=   {"nominate-btn movie-action-btn"}
-                    onClick={() => props.handleNomination(d.imdbID)}
-                     disabled= {props.clickedbuttons.includes`${d.imdbID}`}
+					className={'nominate-btn movie-action-btn'}
+					onClick={() => props.handleNomination(d.imdbID)}
+					disabled={props.clickedbuttons.includes`${d.imdbID}`}
 				>
 					Nominate
 				</Button>
@@ -30,8 +30,7 @@ function Movielist(props) {
 					<Button
 						type="primary"
 						className="direct-to-nomination-btn header-btn"
-                        onClick={props.directToNomination}
-                        
+						onClick={props.directToNomination}
 					>
 						Nominations
 					</Button>
